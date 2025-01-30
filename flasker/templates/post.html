@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block Content %}
+
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+{% endfor %}
+<br/>
+
+
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+
+    <h2> {{ post.title }} </h2>
+    <small>By: {{ post.poster.name }} <br/>
+    {{ post.date_posted }}</small> <br/><br/>
+    {{ post.content|safe }} <br/><br/>
+
+
+<div class="card mb-3">
+    <div class="row g-0 align-items-center">  {# Keeps image and text in one line #}
+        <div class="col-md-2">
+            {% if post.poster.profile_pic %}
+                <img src="{{ url_for('static', filename=post.poster.profile_pic.split('static/')[-1]) }}" 
+                width="180" align="left">
+            {% else %}
+                <img src="{{ url_for('static', filename='Images/image2.png') }}" 
+                width="180" align="right">
+            {% endif %}
+        </div>
+
+        <div class="col-md-10">
+            <div class="card-body">
+                <h5 class="card-title">{{ post.poster.name }}</h5>
+                <p class="card-text">
+                    {% if post.poster.about_author_a %}
+                        {{ post.poster.about_author_a }}
+                    {% else %}
+                        Author has no about profile yet
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    <hr><br/>
+</div>
+
+{% if post.poster_id == current_user.id %}
+
+    <a href="{{ url_for('edit_post', id=post.id)}}" class="btn btn-outline-secondary btn-sm">Edit Post</a>
+    <a href="{{ url_for('delete_post', id=post.id)}}" class="btn btn-outline-danger btn-sm">Delete Post</a>
+{% endif %}
+<a href="{{ url_for('posts')}}" class="btn btn-outline-secondary btn-sm">Back To Blog</a>
+
+
+
+
+{% endblock %}
